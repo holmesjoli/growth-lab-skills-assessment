@@ -6,6 +6,10 @@ import './App.css';
 import metadata from './data/metadata.json';
 import networkData from './data/network.json';
 
+// Data management
+
+metadata = metadata.productHs92;
+
 // Constants
 const selector = "Visualization";
 const width = 800;
@@ -39,7 +43,28 @@ function initTooltip() {
 
   d3.select(`#${selector}`)
     .append("div")
-    .attr("class", "tooltip");
+    .attr("class", "Tooltip");
+}
+
+function addTooltip() {
+
+  d3.selectAll(".node").on("mouseover", function (e, d) {
+    var cx = xScale(d.x) + 20;
+    var cy = yScale(d.y) - 10;
+
+    let sector = metadata.find(e => e.productId === d.productId);
+    console.log(sector)
+
+    d3.select(".Tooltip")
+        .style("visibility", "visible")
+        .style("left", cx + "px")
+        .style("top", cy + "px")
+        .html(`${sector.productName} (${sector.productCode})`);
+
+  }).on("mouseout", function () {
+    d3.select(".Tooltip")
+      .style("visibility", "hidden");
+  });
 }
 
 function initNodes () {
@@ -52,7 +77,7 @@ function initNodes () {
     .append("circle")
     .attr("class", "node")
     .attr("fill", function(d) {
-      let sector = metadata.productHs92.find(e => e.productId === d.productId).productSector.productId;
+      let sector = metadata.find(e => e.productId === d.productId).productSector.productId;
       return hs92ColorsMap.get(sector);
     })
     .attr("cx", d => xScale(d.x))
@@ -83,6 +108,7 @@ function App() {
     initViz();
     initNodes();
     initTooltip();
+    addTooltip();
 
   }, [])
 
