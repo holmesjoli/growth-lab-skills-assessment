@@ -7,6 +7,7 @@ import metadata from './data/metadata.json';
 import networkData from './data/network.json';
 
 // Constants
+const selector = "Visualization";
 const width = 800;
 const height = 600;
 const margin = {left: 50, right: 50, top: 50, bottom: 50}
@@ -34,14 +35,22 @@ let yScale = d3.scaleLinear()
   .domain(d3.extent(networkData.nodes, d => d.y))
   .range([height - margin.bottom, margin.top]);
 
+function initTooltip() {
+
+  d3.select(`#${selector}`)
+    .append("div")
+    .attr("class", "tooltip");
+}
+
 function initNodes () {
-  
-  d3.select("#Visualization svg")
+
+  d3.select(`#${selector} svg`)
   .append("g")
     .selectAll("circle")
     .data(networkData.nodes)
     .enter()
     .append("circle")
+    .attr("class", "node")
     .attr("fill", function(d) {
       let sector = metadata.productHs92.find(e => e.productId === d.productId).productSector.productId;
       return hs92ColorsMap.get(sector);
@@ -58,12 +67,10 @@ function initNodes () {
 function initViz() {
 
   d3
-    .select("#Visualization")
+    .select(`#${selector}`)
     .append("svg")
     .attr("width", width)
     .attr("height", height);
-
-  initNodes();
 }
 
 function App() {
@@ -74,12 +81,14 @@ function App() {
   useEffect(() => {
 
     initViz();
+    initNodes();
+    initTooltip();
 
   }, [])
 
   return (
     <div className="App">
-      <div id="Visualization">
+      <div id={selector}>
       </div>
     </div>
   );
