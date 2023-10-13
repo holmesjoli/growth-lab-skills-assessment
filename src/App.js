@@ -53,7 +53,6 @@ function addTooltip() {
     var cy = yScale(d.y) - 10;
 
     let sector = metadata.find(e => e.productId === d.productId);
-    console.log(sector)
 
     d3.select(".Tooltip")
         .style("visibility", "visible")
@@ -61,9 +60,18 @@ function addTooltip() {
         .style("top", cy + "px")
         .html(`${sector.productName} (${sector.productCode})`);
 
+    d3.select(this)
+    .attr("stroke", "red")
+    .attr("stroke-width", 3);
+
   }).on("mouseout", function () {
     d3.select(".Tooltip")
       .style("visibility", "hidden");
+
+    d3.select(this)
+    .attr("stroke", "#CCCCCC")
+    .attr("stroke-width", 1);
+
   });
 }
 
@@ -86,7 +94,6 @@ function initNodes () {
     .attr("stroke", "#CCCCCC")
     .attr("stroke-width", 1)
     .attr("cursor", "pointer");
-
 }
 
 function initViz() {
