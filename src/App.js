@@ -10,9 +10,28 @@ import networkData from './data/network.json';
 metadata = metadata.productHs92; // simplify object
 networkData.nodes = networkData.nodes.filter(d => d.x && d.y); // filter out null values
 
+let edges = []
+
+for (let e of networkData.edges) {
+
+  let source = networkData.nodes.find(d => d.productId === e.source);
+  let target = networkData.nodes.find(d => d.productId === e.target);
+
+  edges.push({'source': {'productID': e.source,
+                         'x': source.x,
+                          'y': source.y},
+              'target': {'productID': e.target,
+                         'x': target.x,
+                         'y': target.y
+              } 
+            })
+}
+
+networkData.edges = edges
+
 // Constants
 const selector = "Visualization";
-const width = 800;
+const width = 1000;
 const height = 600;
 const margin = {left: 50, right: 50, top: 50, bottom: 50}
 const hs92ColorsMap = new Map([
@@ -96,6 +115,21 @@ function initNodes () {
     .attr("cursor", "pointer");
 }
 
+function initLinks() {
+  d3.select(`#${selector} svg`)
+  .append("g")
+    .selectAll("lines")
+    .data(networkData.edges)
+    .enter()
+    .append("line")
+    .attr("x1", d => xScale(d.source.x))
+    .attr("y1", d => yScale(d.source.y))
+    .attr("x2", d => xScale(d.target.x))
+    .attr("y2", d => yScale(d.target.y))
+    .attr("stroke", "#CCCCCC")
+    .attr("stroke-width", 1);
+}
+
 function initViz() {
 
   d3
@@ -107,12 +141,10 @@ function initViz() {
 
 function App() {
 
-  console.log(networkData)
-  console.log(metadata)
-
   useEffect(() => {
 
     initViz();
+    initLinks();
     initNodes();
     initTooltip();
     addTooltip();
