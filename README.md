@@ -6,7 +6,6 @@ This repository contains code that builds a simple network visualization for the
 
 1. In the command line `npm start`
 
-
 ## Deploy application
 
 1. In the command line `npm run build`
