@@ -10,6 +10,21 @@ import networkData from './data/network.json';
 const width = 800;
 const height = 600;
 const margin = {left: 50, right: 50, top: 50, bottom: 50}
+const hs92ColorsMap = new Map([
+  ['product-HS92-1', 'rgb(125, 218, 161)'],
+  ['product-HS92-2', '#F5CF23'],
+  ['product-HS92-3', 'rgb(218, 180, 125)'],
+  ['product-HS92-4', 'rgb(187, 150, 138)'],
+  ['product-HS92-5', 'rgb(217, 123, 123)'],
+  ['product-HS92-6', 'rgb(197, 123, 217)'],
+  ['product-HS92-7', 'rgb(141, 123, 216)'],
+  ['product-HS92-8', 'rgb(123, 162, 217)'],
+  ['product-HS92-9', 'rgb(125, 218, 218)'],
+  ['product-HS92-10', '#2a607c'],
+  ['product-HS92-14', 'rgb(178, 61, 109)'],
+]);
+
+// Scale functions
 
 let xScale = d3.scaleLinear()
   .domain(d3.extent(networkData.nodes, d => d.x))
@@ -27,7 +42,10 @@ function initNodes () {
     .data(networkData.nodes)
     .enter()
     .append("circle")
-    // .attr("fill", function(d) { return colorScale(d.zone); })
+    .attr("fill", function(d) {
+      let sector = metadata.productHs92.find(e => e.productId === d.productId).productSector.productId;
+      return hs92ColorsMap.get(sector);
+    })
     .attr("cx", d => xScale(d.x))
     .attr("cy", d => yScale(d.y))
     .attr("r", '4px')
@@ -51,6 +69,7 @@ function initViz() {
 function App() {
 
   console.log(networkData)
+  console.log(metadata.productHs92)
 
   useEffect(() => {
 
