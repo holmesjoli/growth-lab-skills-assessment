@@ -7,8 +7,8 @@ import metadata from './data/metadata.json';
 import networkData from './data/network.json';
 
 // Data management
-
-metadata = metadata.productHs92;
+metadata = metadata.productHs92; // simplify object
+networkData.nodes = networkData.nodes.filter(d => d.x && d.y); // filter out null values
 
 // Constants
 const selector = "Visualization";
@@ -108,7 +108,7 @@ function initViz() {
 function App() {
 
   console.log(networkData)
-  console.log(metadata.productHs92)
+  console.log(metadata)
 
   useEffect(() => {
 
