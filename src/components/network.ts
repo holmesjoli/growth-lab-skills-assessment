@@ -4,6 +4,8 @@ import * as d3 from 'd3';
 // Data
 import networkData from '../data/network.json';
 
+import { Attribute, Edges, NetworkData } from '../types';
+
 // Constants ----------------------------------------------
 const width = 1000;
 const height = 600;
@@ -30,47 +32,60 @@ const highlightStrokeWidth = 3;
 
 // Scale functions ----------------------------------------------
 let xScale = d3.scaleLinear()
-  .domain(d3.extent(networkData.nodes, d => d.x))
+  .domain([
+    d3.min(networkData.nodes, ( d ) => d.x) as number,  // cast to number
+    d3.max(networkData.nodes, ( d ) => d.x) as number   // cast to number
+  ])
   .range([margin.left, width - margin.right]);
 
 let yScale = d3.scaleLinear()
-  .domain(d3.extent(networkData.nodes, d => d.y))
+    .domain([
+    d3.min(networkData.nodes, ( d ) => d.y) as number,  // cast to number
+    d3.max(networkData.nodes, ( d ) => d.y) as number   // cast to number
+  ])
   .range([height - margin.bottom, margin.top]);
+
+let colorScale = d3.scaleLinear()
+  .domain([
+  d3.min(networkData.nodes, ( d ) => d.y) as number,  // cast to number
+  d3.max(networkData.nodes, ( d ) => d.y) as number   // cast to number
+])
+.range([height - margin.bottom, margin.top]);
 
 // Functions ----------------------------------------------
 
 // Filters source ids and returns corresponding target ids
-function filterLinksSourceToTarget (data, ids) {
+function filterLinksSourceToTarget (data: Edges[], ids: string[]) {
 
-    let links = data.filter(d => ids.includes(d.source.productId) || ids.includes(d.target.productId));
+    let links = data.filter((d: Edges) => ids.includes(d.source.productId) || ids.includes(d.target.productId));
 
     return links;
 }
 
 // Identify nodes and links to highlight
-function identifyNodes (links) {
-    const source = links.map(d => d.source.productId);
-    const target = links.map(d => d.target.productId);
+function identifyNodes (links: Edges[]) {
+    const source = links.map((d: Edges) => d.source.productId);
+    const target = links.map((d: Edges) => d.target.productId);
     const nodes = [...new Set(source.concat(target))];
 
     return nodes;
 }
 
 // Initializes the tooltip
-export function initTooltip(selector, metaData) {
+export function initTooltip(selector: string, networkData: NetworkData, metaData: any) {
 
     let tooltip = d3.select(`#${selector}`)
         .append("div")
         .attr("class", "Tooltip");
 
-    let connectedNodes;
-    let connectedLinks;
+    let connectedNodes: string[] = [];
+    let connectedLinks: Edges[] = [];
   
-    d3.selectAll(".node").on("mouseover", function (e, d) {
+    d3.selectAll(".node").on("mouseover", function (e, d: any) {
         var cx = xScale(d.x) + 20;
         var cy = yScale(d.y) - 10;
 
-        let sector = metaData.find(e => e.productId === d.productId);
+        let sector = metaData.find((e: any) => e.productId === d.productId);
 
         tooltip
             .style("visibility", "visible")
@@ -114,7 +129,7 @@ export function initTooltip(selector, metaData) {
 }
 
 //Initialize Network Nodes
-export function initNodes (selector, networkData, metaData) {
+export function initNodes (selector: string, networkData: NetworkData, metaData: any) {
   
     d3.select(`#${selector} svg`)
     .append("g")
@@ -124,12 +139,13 @@ export function initNodes (selector, networkData, metaData) {
       .append("circle")
       .attr("class", "node")
       .attr("id", d => d.productId)
-      .attr("fill", function(d) {
-        let sector = metaData.find(e => e.productId === d.productId).productSector.productId;
-        return hs92ColorsMap.get(sector);
-      })
-      .attr("cx", d => xScale(d.x))
-      .attr("cy", d => yScale(d.y))
+    //   .attr("fill", function(d: Attribute) {
+    //     let sector = metaData.find((e: any) => e.productId === d.productId).productSector.productId;
+    //     return hs92ColorsMap.get(sector);
+    //   })
+    //   .attr("fill", (d: any) => colorScale(d.productId))
+      .attr("cx", (d: any) => xScale(d.x))
+      .attr("cy", (d: any) => yScale(d.y))
       .attr("r", 4)
       .attr("stroke", strokeColor)
       .attr("stroke-width", strokeWidth)
@@ -137,7 +153,7 @@ export function initNodes (selector, networkData, metaData) {
 }
  
 // Initalize Network Links (edges)
-export function initLinks(selector, networkData) {
+export function initLinks(selector: string, networkData: NetworkData) {
 
     d3.select(`#${selector} svg`)
     .append("g")
@@ -147,16 +163,16 @@ export function initLinks(selector, networkData) {
       .append("line")
       .attr("class", "link")
       .attr("id", d => `${d.source.productId}-${d.target.productId}`)
-      .attr("x1", d => xScale(d.source.x))
-      .attr("y1", d => yScale(d.source.y))
-      .attr("x2", d => xScale(d.target.x))
-      .attr("y2", d => yScale(d.target.y))
+      .attr("x1", (d: any) => xScale(d.source.x))
+      .attr("y1", (d: any) => yScale(d.source.y))
+      .attr("x2", (d: any) => xScale(d.target.x))
+      .attr("y2", (d: any) => yScale(d.target.y))
       .attr("stroke", strokeColor)
       .attr("stroke-width", 1);
 }
  
 // Initialized the SVG
-export function initViz(selector) {
+export function initViz(selector: string) {
 
     d3
       .select(`#${selector}`)

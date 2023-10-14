@@ -1,10 +1,12 @@
+import { Edges, Attribute } from '../types';
+
 // Adds the positions from the nodes to each of the edges
-export function addLinkPosition(data) {
-    let edges = []
+export function addLinkPosition(data: any) {
+    let edges: Edges[] = [];
     for (let e of data.edges) {
 
-    let source = data.nodes.find(d => d.productId === e.source);
-    let target = data.nodes.find(d => d.productId === e.target);
+    let source = data.nodes.find((d: any) => d.productId === e.source);
+    let target = data.nodes.find((d: any) => d.productId === e.target);
 
     edges.push({'source': {'productId': e.source,
                             'x': source.x,

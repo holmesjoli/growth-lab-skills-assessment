@@ -5,13 +5,19 @@ import './App.css';
 import metaData from './data/metadata.json';
 import networkData from './data/network.json';
 
+import { NetworkData } from './types';
+
 // Components
 import { initViz, initNodes, initLinks, initTooltip } from './components/network';
 import { addLinkPosition } from './components/data_management';
 
 // Data management
-networkData.nodes = networkData.nodes.filter(d => d.x && d.y); // filter out null values
-networkData.edges = addLinkPosition(networkData)
+let networkDataNew: NetworkData = {nodes: [], 
+                                   edges: []
+                                  };
+
+networkDataNew.nodes = networkData.nodes.filter(d => d.x && d.y); // filter out null values
+networkDataNew.edges = addLinkPosition(networkData);
 
 // Constants
 const selector = "Visualization";
@@ -21,9 +27,9 @@ function App() {
   useEffect(() => {
 
     initViz(selector);
-    initLinks(selector, networkData);
-    initNodes(selector, networkData, metaData.productHs92);
-    initTooltip(selector, metaData.productHs92);
+    initLinks(selector, networkDataNew);
+    initNodes(selector, networkDataNew, metaData.productHs92);
+    initTooltip(selector, networkDataNew, metaData.productHs92);
 
   }, [])
 
