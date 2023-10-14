@@ -7,29 +7,12 @@ import networkData from './data/network.json';
 
 // Components
 import { initViz, initNodes, initLinks, initTooltip } from './components/network';
+import { addLinkPosition } from './components/data_management';
 
 // Data management
 metaData = metaData.productHs92; // simplify object
 networkData.nodes = networkData.nodes.filter(d => d.x && d.y); // filter out null values
-
-let edges = []
-
-for (let e of networkData.edges) {
-
-  let source = networkData.nodes.find(d => d.productId === e.source);
-  let target = networkData.nodes.find(d => d.productId === e.target);
-
-  edges.push({'source': {'productId': e.source,
-                         'x': source.x,
-                          'y': source.y},
-              'target': {'productId': e.target,
-                         'x': target.x,
-                         'y': target.y
-              } 
-            })
-}
-
-networkData.edges = edges
+networkData.edges = addLinkPosition(networkData)
 
 // Constants
 const selector = "Visualization";
