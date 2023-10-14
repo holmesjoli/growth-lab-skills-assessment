@@ -151,7 +151,7 @@ export function initLinks(selector, networkData) {
       .attr("y1", d => yScale(d.source.y))
       .attr("x2", d => xScale(d.target.x))
       .attr("y2", d => yScale(d.target.y))
-      .attr("stroke", "#CCCCCC")
+      .attr("stroke", strokeColor)
       .attr("stroke-width", 1);
 }
  
