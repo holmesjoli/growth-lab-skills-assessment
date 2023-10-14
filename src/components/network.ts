@@ -139,10 +139,10 @@ export function initNodes (selector: string, networkData: NetworkData, metaData:
       .append("circle")
       .attr("class", "node")
       .attr("id", d => d.productId)
-    //   .attr("fill", function(d: Attribute) {
-    //     let sector = metaData.find((e: any) => e.productId === d.productId).productSector.productId;
-    //     return hs92ColorsMap.get(sector);
-    //   })
+      .attr("fill", function(d: Attribute) {
+        let sector = metaData.find((e: any) => e.productId === d.productId).productSector.productId;
+        return hs92ColorsMap.get(sector)!!;
+      })
     //   .attr("fill", (d: any) => colorScale(d.productId))
       .attr("cx", (d: any) => xScale(d.x))
       .attr("cy", (d: any) => yScale(d.y))
