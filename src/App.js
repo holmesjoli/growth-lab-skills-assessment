@@ -19,10 +19,10 @@ for (let e of networkData.edges) {
   let source = networkData.nodes.find(d => d.productId === e.source);
   let target = networkData.nodes.find(d => d.productId === e.target);
 
-  edges.push({'source': {'productID': e.source,
+  edges.push({'source': {'productId': e.source,
                          'x': source.x,
                           'y': source.y},
-              'target': {'productID': e.target,
+              'target': {'productId': e.target,
                          'x': target.x,
                          'y': target.y
               } 
