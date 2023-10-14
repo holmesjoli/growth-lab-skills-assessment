@@ -10,7 +10,6 @@ import { initViz, initNodes, initLinks, initTooltip } from './components/network
 import { addLinkPosition } from './components/data_management';
 
 // Data management
-metaData = metaData.productHs92; // simplify object
 networkData.nodes = networkData.nodes.filter(d => d.x && d.y); // filter out null values
 networkData.edges = addLinkPosition(networkData)
 
@@ -23,8 +22,8 @@ function App() {
 
     initViz(selector);
     initLinks(selector, networkData);
-    initNodes(selector, networkData, metaData);
-    initTooltip(selector, metaData);
+    initNodes(selector, networkData, metaData.productHs92);
+    initTooltip(selector, metaData.productHs92);
 
   }, [])
 
