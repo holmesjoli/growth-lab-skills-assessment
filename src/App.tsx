@@ -8,8 +8,8 @@ import networkData from './data/network.json';
 import { NetworkData } from './types';
 
 // Components
-import { initViz, initNodes, initLinks, initTooltip } from './components/network';
-import { addLinkPosition } from './components/data_management';
+import { initViz, initNodes, initLinks, initTooltip } from './components/Network';
+import { addLinkPosition } from './components/DataManagement';
 
 // Data management
 let networkDataNew: NetworkData = {nodes: [], 

@@ -1,4 +1,4 @@
-import { Edges, Attribute } from '../types';
+import { Edges } from '../types';
 
 // Adds the positions from the nodes to each of the edges
 export function addLinkPosition(data: any) {
